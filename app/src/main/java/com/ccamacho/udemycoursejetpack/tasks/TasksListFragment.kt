@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ccamacho.udemycoursejetpack.R
 import com.ccamacho.udemycoursejetpack.models.Tasks
+import com.ccamacho.udemycoursejetpack.models.Todo
 import kotlinx.android.synthetic.main.fragment_tasks_list.*
 
 class TasksListFragment : Fragment() {
@@ -28,8 +29,14 @@ class TasksListFragment : Fragment() {
 
         recycler_view.layoutManager = LinearLayoutManager(context)
         val adapter = TasksAdapter(mutableListOf(
-            Tasks("Tarefa 1"),
-            Tasks("Tarefa 2")
+            Tasks("Treinamento de Android", mutableListOf(
+                Todo("Fundamentos e básico", true),
+                Todo("Android e Jetpack")
+            )),
+            Tasks("Leitura", mutableListOf(
+                Todo("Harry Potter e a pedra filosofal"),
+                Todo("Percy Jackson e o mar de monstros")
+            ))
         ))
         recycler_view.adapter = adapter
     }

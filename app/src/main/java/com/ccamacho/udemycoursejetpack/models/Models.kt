@@ -8,7 +8,7 @@ data class Tasks(
 
 data class Todo(
     var description: String,
-    var isComplete: Boolean
+    var isComplete: Boolean = false
 )
 
 data class Notes(
