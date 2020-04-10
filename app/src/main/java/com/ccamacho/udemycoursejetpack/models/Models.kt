@@ -1,6 +1,6 @@
 package com.ccamacho.udemycoursejetpack.models
 
-data class Task @JvmOverloads constructor(
+data class Tasks(
     var title: String,
     val todos: MutableList<Todo> = mutableListOf(),
     var tag: Tag? = null
