@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ccamacho.udemycoursejetpack.R
@@ -15,6 +16,8 @@ class NotesListFragment : Fragment() {
 
     lateinit var viewModel: NotesViewModal
     lateinit var touchActionDelegate: TouchActionDelegate
+
+    lateinit var adapter: NotesAdapter
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -36,15 +39,21 @@ class NotesListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bindViewModel()
-
         recycler_view.layoutManager = LinearLayoutManager(context)
-        val adapter = NotesAdapter(viewModel.getFakeData(), touchActionDelegate)
+        adapter = NotesAdapter(
+            touchActionDelegate =  touchActionDelegate
+        )
         recycler_view.adapter = adapter
+
+        bindViewModel()
     }
 
     private fun bindViewModel() {
         viewModel = ViewModelProvider(this).get(NotesViewModal::class.java)
+
+        viewModel.notesListLiveData.observe(viewLifecycleOwner, Observer { notesList ->
+            adapter.updateList(notesList)
+        })
     }
 
     companion object {

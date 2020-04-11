@@ -7,6 +7,12 @@ abstract class BaseRecyclerAdapter<T>(
     protected val masterList: MutableList<T> = mutableListOf()
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    fun updateList(list: MutableList<T>) {
+        masterList.clear()
+        masterList.addAll(list)
+        notifyDataSetChanged()
+    }
+
     override fun getItemViewType(position: Int): Int =
         if (position == FIRST_ITEM) {
             TYPE_ADD_BUTTON
