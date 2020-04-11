@@ -1,5 +1,6 @@
 package com.ccamacho.udemycoursejetpack.notes
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,8 +12,22 @@ import com.ccamacho.udemycoursejetpack.models.Notes
 import kotlinx.android.synthetic.main.fragment_notes_list.*
 
 class NotesListFragment : Fragment() {
+
+    lateinit var touchActionDelegate: TouchActionDelegate
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        context?.let {
+
+            if (it is TouchActionDelegate) {
+                touchActionDelegate = it
+            }
+        }
     }
 
     override fun onCreateView(
@@ -31,11 +46,15 @@ class NotesListFragment : Fragment() {
             Notes("Anotação 1", null),
             Notes("Anotação 2", null),
             Notes("Anotação 3", null)
-        ))
+        ), touchActionDelegate)
         recycler_view.adapter = adapter
     }
 
     companion object {
         fun newInstance() = NotesListFragment()
+    }
+
+    interface TouchActionDelegate {
+        fun onAddButtonClicked(value: String)
     }
 }

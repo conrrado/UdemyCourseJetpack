@@ -1,11 +1,7 @@
 package com.ccamacho.udemycoursejetpack.foundations
 
 import android.view.View
-import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.ccamacho.udemycoursejetpack.R
-import com.ccamacho.udemycoursejetpack.tasks.TasksAdapter
-import kotlinx.android.synthetic.main.view_add_button.view.*
 
 abstract class BaseRecyclerAdapter<T>(
     protected val masterList: MutableList<T> = mutableListOf()

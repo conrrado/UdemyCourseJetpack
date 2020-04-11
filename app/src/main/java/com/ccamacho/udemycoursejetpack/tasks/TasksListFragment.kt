@@ -1,5 +1,6 @@
 package com.ccamacho.udemycoursejetpack.tasks
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,8 +13,22 @@ import com.ccamacho.udemycoursejetpack.models.Todo
 import kotlinx.android.synthetic.main.fragment_tasks_list.*
 
 class TasksListFragment : Fragment() {
+
+    lateinit var touchActionDelegate: TouchActionDelegate
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        context?.let {
+
+            if (it is TouchActionDelegate) {
+                touchActionDelegate = it
+            }
+        }
     }
 
     override fun onCreateView(
@@ -37,11 +52,15 @@ class TasksListFragment : Fragment() {
                 Todo("Harry Potter e a pedra filosofal"),
                 Todo("Percy Jackson e o mar de monstros")
             ))
-        ))
+        ), touchActionDelegate)
         recycler_view.adapter = adapter
     }
 
     companion object {
         fun newInstance() = TasksListFragment()
+    }
+
+    interface TouchActionDelegate {
+        fun onAddButtonClicked(value: String)
     }
 }
