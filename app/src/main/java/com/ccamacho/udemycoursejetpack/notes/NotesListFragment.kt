@@ -6,24 +6,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ccamacho.udemycoursejetpack.R
-import com.ccamacho.udemycoursejetpack.models.Notes
 import kotlinx.android.synthetic.main.fragment_notes_list.*
 
 class NotesListFragment : Fragment() {
 
+    lateinit var viewModel: NotesViewModal
     lateinit var touchActionDelegate: TouchActionDelegate
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-
-        context?.let {
-
+        context.let {
             if (it is TouchActionDelegate) {
                 touchActionDelegate = it
             }
@@ -41,13 +36,15 @@ class NotesListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        bindViewModel()
+
         recycler_view.layoutManager = LinearLayoutManager(context)
-        val adapter = NotesAdapter(mutableListOf(
-            Notes("Anotação 1", null),
-            Notes("Anotação 2", null),
-            Notes("Anotação 3", null)
-        ), touchActionDelegate)
+        val adapter = NotesAdapter(viewModel.getFakeData(), touchActionDelegate)
         recycler_view.adapter = adapter
+    }
+
+    private fun bindViewModel() {
+        viewModel = ViewModelProvider(this).get(NotesViewModal::class.java)
     }
 
     companion object {

@@ -6,25 +6,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ccamacho.udemycoursejetpack.R
-import com.ccamacho.udemycoursejetpack.models.Tasks
-import com.ccamacho.udemycoursejetpack.models.Todo
 import kotlinx.android.synthetic.main.fragment_tasks_list.*
 
 class TasksListFragment : Fragment() {
 
+    lateinit var viewModel: TasksViewModel
     lateinit var touchActionDelegate: TouchActionDelegate
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-
-        context?.let {
-
+        context.let {
             if (it is TouchActionDelegate) {
                 touchActionDelegate = it
             }
@@ -42,18 +36,15 @@ class TasksListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        bindViewModel()
+
         recycler_view.layoutManager = LinearLayoutManager(context)
-        val adapter = TasksAdapter(mutableListOf(
-            Tasks("Treinamento de Android", mutableListOf(
-                Todo("Fundamentos e básico", true),
-                Todo("Android e Jetpack")
-            )),
-            Tasks("Leitura", mutableListOf(
-                Todo("Harry Potter e a pedra filosofal"),
-                Todo("Percy Jackson e o mar de monstros")
-            ))
-        ), touchActionDelegate)
+        val adapter = TasksAdapter(viewModel.getFakeData(), touchActionDelegate)
         recycler_view.adapter = adapter
+    }
+
+    private fun bindViewModel() {
+        viewModel = ViewModelProvider(this).get(TasksViewModel::class.java)
     }
 
     companion object {
