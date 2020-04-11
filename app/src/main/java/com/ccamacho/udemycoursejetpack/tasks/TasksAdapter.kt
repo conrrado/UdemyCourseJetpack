@@ -7,8 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ccamacho.udemycoursejetpack.R
 import com.ccamacho.udemycoursejetpack.foundations.BaseRecyclerAdapter
 import com.ccamacho.udemycoursejetpack.models.Tasks
-import com.ccamacho.udemycoursejetpack.views.TodoView
-import kotlinx.android.synthetic.main.item_tasks.view.*
+import com.ccamacho.udemycoursejetpack.views.TaskView
 
 class TasksAdapter(
     taskList: MutableList<Tasks> = mutableListOf()
@@ -20,14 +19,7 @@ class TasksAdapter(
     class ViewHolder(view: View): BaseViewHolder<Tasks>(view) {
 
         override fun onBind(data: Tasks) {
-            view.title_view.text = data.title
-
-            data.todos.forEach {todo ->
-                val todoView = (LayoutInflater.from(view.context).inflate(R.layout.view_todo, view.todo_container, false) as TodoView).apply {
-                    initView(todo)
-                }
-                view.todo_container.addView(todoView)
-            }
+            (view as TaskView).initView(data)
         }
     }
 }
