@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ccamacho.udemycoursejetpack.models.Notes
 
-class NotesViewModal: ViewModel() {
+class NotesViewModal: ViewModel(), NotesListViewContract {
 
     private val _notesListLiveData: MutableLiveData<MutableList<Notes>> = MutableLiveData()
     val notesListLiveData: LiveData<MutableList<Notes>> = _notesListLiveData

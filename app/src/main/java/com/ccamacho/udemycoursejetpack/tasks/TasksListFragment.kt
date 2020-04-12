@@ -15,9 +15,8 @@ import kotlinx.android.synthetic.main.fragment_tasks_list.*
 class TasksListFragment : Fragment() {
 
     lateinit var viewModel: TasksViewModel
+    lateinit var contentView: TasksListView
     lateinit var touchActionDelegate: TouchActionDelegate
-
-    lateinit var adapter: TasksAdapter
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -33,26 +32,25 @@ class TasksListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tasks_list, container, false)
+        return inflater.inflate(R.layout.fragment_tasks_list, container, false).apply {
+            contentView = this as TasksListView
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        recycler_view.layoutManager = LinearLayoutManager(context)
-        adapter = TasksAdapter(
-            touchActionDelegate =  touchActionDelegate
-        )
-        recycler_view.adapter = adapter
-
         bindViewModel()
+        setContentView()
+    }
+
+    private fun setContentView() {
+        contentView.initView(touchActionDelegate, viewModel)
     }
 
     private fun bindViewModel() {
         viewModel = ViewModelProvider(this).get(TasksViewModel::class.java)
-
         viewModel.tasksListLiveData.observe(viewLifecycleOwner, Observer { tasksList ->
-            adapter.updateList(tasksList)
+            contentView.updateList(tasksList)
         })
     }
 

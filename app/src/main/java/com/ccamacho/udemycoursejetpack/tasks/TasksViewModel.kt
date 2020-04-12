@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.ccamacho.udemycoursejetpack.models.Tasks
 import com.ccamacho.udemycoursejetpack.models.Todo
 
-class TasksViewModel: ViewModel() {
+class TasksViewModel: ViewModel(), TaskListViewContract {
 
     private val _tasksListLiveData: MutableLiveData<MutableList<Tasks>> = MutableLiveData()
     val tasksListLiveData: LiveData<MutableList<Tasks>> = _tasksListLiveData
@@ -25,4 +25,8 @@ class TasksViewModel: ViewModel() {
             Todo("Percy Jackson e o mar de monstros")
         ))
     )
+
+    override fun onTodoUpdated(taskIndex: Int, todoIndex: Int, isComplete: Boolean) {
+        _tasksListLiveData.value?.get(taskIndex)?.todos?.get(todoIndex)?.isComplete = isComplete
+    }
 }
