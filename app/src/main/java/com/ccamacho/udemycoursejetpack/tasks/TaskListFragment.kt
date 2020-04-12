@@ -1,4 +1,4 @@
-package com.ccamacho.udemycoursejetpack.notes
+package com.ccamacho.udemycoursejetpack.tasks
 
 import android.content.Context
 import android.os.Bundle
@@ -10,10 +10,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.ccamacho.udemycoursejetpack.R
 
-class NotesListFragment : Fragment() {
+class TaskListFragment : Fragment() {
 
-    lateinit var viewModel: NotesViewModal
-    lateinit var contentView: NotesListView
+    lateinit var viewModel: TaskViewModel
+    lateinit var contentView: TaskListView
     lateinit var touchActionDelegate: TouchActionDelegate
 
     override fun onAttach(context: Context) {
@@ -30,8 +30,8 @@ class NotesListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_notes_list, container, false).apply {
-            contentView = this as NotesListView
+        return inflater.inflate(R.layout.fragment_tasks_list, container, false).apply {
+            contentView = this as TaskListView
         }
     }
 
@@ -46,14 +46,14 @@ class NotesListFragment : Fragment() {
     }
 
     private fun bindViewModel() {
-        viewModel = ViewModelProvider(this).get(NotesViewModal::class.java)
-        viewModel.notesListLiveData.observe(viewLifecycleOwner, Observer { notesList ->
-            contentView.updateList(notesList)
+        viewModel = ViewModelProvider(this).get(TaskViewModel::class.java)
+        viewModel.taskListLiveData.observe(viewLifecycleOwner, Observer { tasksList ->
+            contentView.updateList(tasksList)
         })
     }
 
     companion object {
-        fun newInstance() = NotesListFragment()
+        fun newInstance() = TaskListFragment()
     }
 
     interface TouchActionDelegate {

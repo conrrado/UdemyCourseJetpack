@@ -6,21 +6,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.ccamacho.udemycoursejetpack.R
 import com.ccamacho.udemycoursejetpack.create.CreateActivity
-import com.ccamacho.udemycoursejetpack.notes.NotesListFragment
-import com.ccamacho.udemycoursejetpack.tasks.TasksListFragment
+import com.ccamacho.udemycoursejetpack.notes.NoteListFragment
+import com.ccamacho.udemycoursejetpack.tasks.TaskListFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_navigation.*
 
-class NavigationActivity : AppCompatActivity(), TasksListFragment.TouchActionDelegate, NotesListFragment.TouchActionDelegate {
+class NavigationActivity : AppCompatActivity(), TaskListFragment.TouchActionDelegate, NoteListFragment.TouchActionDelegate {
 
     private val mOnNavigationSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when(item.itemId) {
             R.id.navigation_tasks -> {
-                replaceFragment(TasksListFragment.newInstance())
+                replaceFragment(TaskListFragment.newInstance())
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_notes -> {
-                replaceFragment(NotesListFragment.newInstance())
+                replaceFragment(NoteListFragment.newInstance())
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -30,7 +30,7 @@ class NavigationActivity : AppCompatActivity(), TasksListFragment.TouchActionDel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_navigation)
-        replaceFragment(TasksListFragment.newInstance())
+        replaceFragment(TaskListFragment.newInstance())
         nav_view.setOnNavigationItemSelectedListener(mOnNavigationSelectedListener)
     }
 

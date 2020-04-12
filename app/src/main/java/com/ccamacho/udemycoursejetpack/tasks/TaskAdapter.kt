@@ -6,16 +6,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ccamacho.udemycoursejetpack.R
 import com.ccamacho.udemycoursejetpack.foundations.BaseRecyclerAdapter
-import com.ccamacho.udemycoursejetpack.models.Tasks
+import com.ccamacho.udemycoursejetpack.models.Task
 import com.ccamacho.udemycoursejetpack.navigation.NavigationActivity
 import com.ccamacho.udemycoursejetpack.views.TaskView
 import kotlinx.android.synthetic.main.view_add_button.view.*
 
-class TasksAdapter(
-    taskList: MutableList<Tasks> = mutableListOf(),
-    val touchActionDelegate: TasksListFragment.TouchActionDelegate,
+class TaskAdapter(
+    taskList: MutableList<Task> = mutableListOf(),
+    val touchActionDelegate: TaskListFragment.TouchActionDelegate,
     val dataActionDelegate: TaskListViewContract
-): BaseRecyclerAdapter<Tasks>(taskList) {
+): BaseRecyclerAdapter<Task>(taskList) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
         if (viewType == TYPE_INFO) {
@@ -24,9 +24,9 @@ class TasksAdapter(
             AddButtonViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_add_button, parent, false))
         }
 
-    inner class TaskViewHolder(view: View): BaseViewHolder<Tasks>(view) {
+    inner class TaskViewHolder(view: View): BaseViewHolder<Task>(view) {
 
-        override fun onBind(data: Tasks, listIndex: Int) {
+        override fun onBind(data: Task, listIndex: Int) {
             (view as TaskView).initView(data) { todoIndex, isChecked ->
                 dataActionDelegate.onTodoUpdated(listIndex, todoIndex, isChecked)
             }

@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.ccamacho.udemycoursejetpack.R
-import com.ccamacho.udemycoursejetpack.models.Tasks
+import com.ccamacho.udemycoursejetpack.models.Task
 import kotlinx.android.synthetic.main.item_tasks.view.*
 
 class TaskView @JvmOverloads constructor(
@@ -14,9 +14,9 @@ class TaskView @JvmOverloads constructor(
     defStyleAttr: Int = 1
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    lateinit var task: Tasks
+    lateinit var task: Task
 
-    fun initView(task: Tasks, todoCheckedCallback: (Int, Boolean) -> Unit) {
+    fun initView(task: Task, todoCheckedCallback: (Int, Boolean) -> Unit) {
         this.task = task
 
         title_view.text = task.title

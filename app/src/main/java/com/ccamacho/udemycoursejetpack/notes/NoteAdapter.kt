@@ -6,16 +6,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ccamacho.udemycoursejetpack.R
 import com.ccamacho.udemycoursejetpack.foundations.BaseRecyclerAdapter
-import com.ccamacho.udemycoursejetpack.models.Notes
+import com.ccamacho.udemycoursejetpack.models.Note
 import com.ccamacho.udemycoursejetpack.navigation.NavigationActivity
 import com.ccamacho.udemycoursejetpack.views.NoteView
 import kotlinx.android.synthetic.main.view_add_button.view.*
 
-class NotesAdapter(
-    noteList: MutableList<Notes> = mutableListOf(),
-    val touchActionDelegate: NotesListFragment.TouchActionDelegate,
-    val dataActionDelegate: NotesListViewContract
-): BaseRecyclerAdapter<Notes>(noteList) {
+class NoteAdapter(
+    noteList: MutableList<Note> = mutableListOf(),
+    val touchActionDelegate: NoteListFragment.TouchActionDelegate,
+    val dataActionDelegate: NoteListViewContract
+): BaseRecyclerAdapter<Note>(noteList) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
         if (viewType == TYPE_INFO) {
@@ -24,9 +24,9 @@ class NotesAdapter(
             AddButtonViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_add_button, parent, false))
         }
 
-    class NotesViewHolder(view: View): BaseViewHolder<Notes>(view) {
+    class NotesViewHolder(view: View): BaseViewHolder<Note>(view) {
 
-        override fun onBind(data: Notes, listIndex: Int) {
+        override fun onBind(data: Note, listIndex: Int) {
             (view as NoteView).initView(data)
         }
     }
