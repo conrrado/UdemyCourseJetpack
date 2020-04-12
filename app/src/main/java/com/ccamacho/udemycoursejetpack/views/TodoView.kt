@@ -1,7 +1,6 @@
 package com.ccamacho.udemycoursejetpack.views
 
 import android.content.Context
-import android.graphics.Paint
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.ccamacho.udemycoursejetpack.models.Todo
@@ -17,31 +16,19 @@ class TodoView @JvmOverloads constructor(
         description_view.text = todo.description
         complete_checkBox.isChecked = todo.isComplete
         if (todo.isComplete) {
-            createStrikeThrough()
+            description_view.setStrikeThrough()
         }
         setUpCheckStateListener(todo, callback)
     }
 
-    fun setUpCheckStateListener(todo: Todo, callback: ((Boolean) -> Unit)? = null) {
+    private fun setUpCheckStateListener(todo: Todo, callback: ((Boolean) -> Unit)? = null) {
         complete_checkBox.setOnCheckedChangeListener { _, isChecked: Boolean ->
             todo.isComplete = isChecked
             callback?.invoke(isChecked)
-            removeStrikeThrough()
+            description_view.removeStrikeThrough()
             if (isChecked) {
-                createStrikeThrough()
+                description_view.setStrikeThrough()
             }
-        }
-    }
-
-    private fun createStrikeThrough() {
-        description_view.apply {
-            paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-        }
-    }
-
-    private fun removeStrikeThrough() {
-        description_view.apply {
-            paintFlags = paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
         }
     }
 }
