@@ -8,16 +8,30 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.ccamacho.udemycoursejetpack.R
+import com.ccamacho.udemycoursejetpack.foundations.ApplicationScope
+import com.ccamacho.udemycoursejetpack.foundations.NullFieldChecker
 import com.ccamacho.udemycoursejetpack.foundations.StateChangeTextWatcher
+import com.ccamacho.udemycoursejetpack.models.Task
+import com.ccamacho.udemycoursejetpack.models.Todo
+import com.ccamacho.udemycoursejetpack.tasks.TaskLocalModel
 import com.ccamacho.udemycoursejetpack.views.CreateTodoView
 import kotlinx.android.synthetic.main.fragment_create_task.*
 import kotlinx.android.synthetic.main.view_create_task.view.*
 import kotlinx.android.synthetic.main.view_create_todo.view.*
+import toothpick.Toothpick
+import javax.inject.Inject
+
+private const val MAX_TODO_COUNT = 5
 
 class CreateTaskFragment : Fragment() {
 
+    @Inject
+    lateinit var model: TaskLocalModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Toothpick.inject(this, ApplicationScope.scope)
     }
 
     override fun onCreateView(
@@ -36,8 +50,6 @@ class CreateTaskFragment : Fragment() {
 
                 if (!s.isNullOrEmpty() && previousValue.isNullOrEmpty()) {
                     addTodoView()
-                } else if (!previousValue.isNullOrEmpty() && s.isNullOrEmpty()) {
-                    removeTodoView(container_view.getChildAt(container_view.childCount - 1))
                 }
 
                 super.afterTextChanged(s)
@@ -46,26 +58,72 @@ class CreateTaskFragment : Fragment() {
     }
 
     private fun addTodoView() {
-        val view = LayoutInflater.from(context).inflate(R.layout.view_create_todo, container_view, false) as CreateTodoView
+        if (canAddTodos()) {
+            val view = (LayoutInflater.from(context).inflate(R.layout.view_create_todo, container_view, false) as CreateTodoView).apply {
+                todo_edit_text.addTextChangedListener(object : StateChangeTextWatcher() {
+                    override fun afterTextChanged(s: Editable?) {
 
-        view.todo_edit_text.addTextChangedListener(object : StateChangeTextWatcher() {
-            override fun afterTextChanged(s: Editable?) {
+                        if (!s.isNullOrEmpty() && previousValue.isNullOrEmpty()) {
+                            addTodoView()
+                        } else if (!previousValue.isNullOrEmpty() && s.isNullOrEmpty()) {
+                            removeTodoView(this@apply)
 
-                if (!s.isNullOrEmpty() && previousValue.isNullOrEmpty()) {
-                    addTodoView()
-                } else if (!previousValue.isNullOrEmpty() && s.isNullOrEmpty()) {
-                    removeTodoView(view)
-                }
+                            if (container_view.childCount == MAX_TODO_COUNT) {
+                                addTodoView()
+                            }
+                        }
 
-                super.afterTextChanged(s)
+                        super.afterTextChanged(s)
+                    }
+                })
             }
-        })
 
-        container_view.addView(view)
+            container_view.addView(view)
+        }
     }
 
     private fun removeTodoView(view: View) {
         container_view.removeView(view)
+    }
+
+    private fun canAddTodos(): Boolean = (container_view.childCount < MAX_TODO_COUNT + 1) &&
+            !(container_view.getChildAt(container_view.childCount - 1) as NullFieldChecker).hasNullField()
+
+    private fun isTaskEmpty(): Boolean = create_task_view.task_edit_text.editableText.isNullOrEmpty()
+
+    fun saveTask(callback: (Boolean) -> Unit) {
+        createTask()?.let {
+            model.addTask(it) {
+                // assume model always works
+                callback.invoke(true)
+            }
+        } ?: callback.invoke(false)
+    }
+
+    fun createTask(): Task? {
+        if (!isTaskEmpty()) {
+            container_view.run {
+
+                var taskField: String? = null
+                val todoList: MutableList<Todo> = mutableListOf()
+                for (i in 0 until container_view.childCount) {
+                    val item = container_view.getChildAt(i).task_edit_text?.editableText
+                    if (i == 0) {
+                        taskField = item?.toString()
+                    } else {
+                        if (!item.isNullOrEmpty()) {
+                            todoList.add(Todo(item.toString()))
+                        }
+                    }
+                }
+
+                return taskField?.let {
+                    Task(taskField, todoList)
+                }
+            }
+        } else {
+            return null
+        }
     }
 
     interface OnFragmentInteractionListener {

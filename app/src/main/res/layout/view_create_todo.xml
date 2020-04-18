@@ -7,6 +7,7 @@
 
     <ImageView
         android:id="@+id/image_view"
+        android:src="@drawable/ic_plus"
         android:layout_width="@dimen/image_icon_default"
         android:layout_height="@dimen/image_icon_default"
         app:layout_constraintStart_toStartOf="parent"
