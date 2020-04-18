@@ -1,5 +1,6 @@
 package com.ccamacho.udemycoursejetpack.create
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import androidx.fragment.app.Fragment
@@ -13,12 +14,13 @@ import com.ccamacho.udemycoursejetpack.foundations.NullFieldChecker
 import com.ccamacho.udemycoursejetpack.foundations.StateChangeTextWatcher
 import com.ccamacho.udemycoursejetpack.models.Task
 import com.ccamacho.udemycoursejetpack.models.Todo
-import com.ccamacho.udemycoursejetpack.tasks.TaskLocalModel
+import com.ccamacho.udemycoursejetpack.tasks.ITaskModel
 import com.ccamacho.udemycoursejetpack.views.CreateTodoView
 import kotlinx.android.synthetic.main.fragment_create_task.*
 import kotlinx.android.synthetic.main.view_create_task.view.*
 import kotlinx.android.synthetic.main.view_create_todo.view.*
 import toothpick.Toothpick
+import java.lang.RuntimeException
 import javax.inject.Inject
 
 private const val MAX_TODO_COUNT = 5
@@ -26,7 +28,9 @@ private const val MAX_TODO_COUNT = 5
 class CreateTaskFragment : Fragment() {
 
     @Inject
-    lateinit var model: TaskLocalModel
+    lateinit var model: ITaskModel
+
+    private var listener: OnFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +44,20 @@ class CreateTaskFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_create_task, container, false)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnFragmentInteractionListener) {
+            listener = context
+        } else {
+            throw RuntimeException("$context must implement OnFragmentInteractionListener")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        listener = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -100,19 +118,20 @@ class CreateTaskFragment : Fragment() {
         } ?: callback.invoke(false)
     }
 
-    fun createTask(): Task? {
+    private fun createTask(): Task? {
         if (!isTaskEmpty()) {
             container_view.run {
 
                 var taskField: String? = null
                 val todoList: MutableList<Todo> = mutableListOf()
                 for (i in 0 until container_view.childCount) {
-                    val item = container_view.getChildAt(i).task_edit_text?.editableText
+
+                    val item = container_view.getChildAt(i)
                     if (i == 0) {
-                        taskField = item?.toString()
+                        taskField = item.task_edit_text.editableText?.toString()
                     } else {
-                        if (!item.isNullOrEmpty()) {
-                            todoList.add(Todo(item.toString()))
+                        if (!item.todo_edit_text.editableText.isNullOrEmpty()) {
+                            todoList.add(Todo(item.todo_edit_text.editableText.toString()))
                         }
                     }
                 }
