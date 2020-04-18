@@ -1,37 +1,43 @@
 package com.ccamacho.udemycoursejetpack.tasks
 
-import android.util.Log
+import com.ccamacho.udemycoursejetpack.application.NoteApplication
+import com.ccamacho.udemycoursejetpack.database.RoomDatabaseClient
 import com.ccamacho.udemycoursejetpack.models.Task
 import com.ccamacho.udemycoursejetpack.models.Todo
 import javax.inject.Inject
 
 class TaskLocalModel @Inject constructor(): ITaskModel {
 
-    override fun getFakeData(): MutableList<Task> = mutableListOf(
-        Task("Treinamento de Android", mutableListOf(
-            Todo("Fundamentos e básico", true),
-            Todo("Android e Jetpack")
-        )),
-        Task("Leitura", mutableListOf(
-            Todo("Harry Potter e a pedra filosofal"),
-            Todo("Percy Jackson e o mar de monstros")
-        ))
-    )
+    private var databaseClient = RoomDatabaseClient.getInstance(NoteApplication.instance.applicationContext)
+
+    override fun getFakeData(): MutableList<Task> = retrieveTasks()
 
     override fun addTask(task: Task, callback: SuccessCallback) {
-        Log.d("TaskLocalModel", task.toString())
+        databaseClient.taskDAO().addTask(task)
+        addTodosInTask(task)
         callback.invoke(true)
     }
 
+    private fun addTodosInTask(task: Task) {
+        task.todos.forEach { todo ->
+            databaseClient.taskDAO().addTodo(todo)
+        }
+    }
+
     override fun updateTask(task: Task, callback: SuccessCallback) {
-        TODO("Not yet implemented")
+        databaseClient.taskDAO().updateTask(task)
+        callback.invoke(true)
+    }
+
+    override fun updateTodo(todo: Todo, callback: SuccessCallback) {
+        databaseClient.taskDAO().updateTodo(todo)
+        callback.invoke(true)
     }
 
     override fun deleteTask(task: Task, callback: SuccessCallback) {
-        TODO("Not yet implemented")
+        databaseClient.taskDAO().deleteTask(task)
+        callback.invoke(true)
     }
 
-    override fun retrieveTasks(): List<Task> {
-        TODO("Not yet implemented")
-    }
+    override fun retrieveTasks(): MutableList<Task> = databaseClient.taskDAO().retrieveTasks()
 }

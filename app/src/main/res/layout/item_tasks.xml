@@ -7,13 +7,26 @@
 
     <TextView
         android:id="@+id/title_view"
-        android:layout_width="wrap_content"
+        android:text="TextView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/item_margin_default"
         android:layout_marginTop="@dimen/item_margin_default"
-        android:text="TextView"
+        android:layout_marginEnd="@dimen/item_margin_small"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/image_button"/>
+
+    <ImageButton
+        android:id="@+id/image_button"
+        android:src="@drawable/ic_delete"
+        android:layout_width="@dimen/image_icon_default"
+        android:layout_height="@dimen/image_icon_default"
+        android:background="@color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/title_view"
+        app:layout_constraintBottom_toBottomOf="@id/title_view"
+        android:layout_marginEnd="@dimen/item_margin_default"/>
 
     <LinearLayout
         android:id="@+id/todo_container"

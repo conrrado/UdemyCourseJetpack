@@ -24,10 +24,11 @@ class NoteAdapter(
             AddButtonViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_add_button, parent, false))
         }
 
-    class NotesViewHolder(view: View): BaseViewHolder<Note>(view) {
-
+    inner class NotesViewHolder(view: View): BaseViewHolder<Note>(view) {
         override fun onBind(data: Note, listIndex: Int) {
-            (view as NoteView).initView(data)
+            (view as NoteView).initView(data) {
+                dataActionDelegate.onDeleteNote(masterList[listIndex])
+            }
         }
     }
 

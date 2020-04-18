@@ -131,7 +131,7 @@ class CreateTaskFragment : Fragment() {
                         taskField = item.task_edit_text.editableText?.toString()
                     } else {
                         if (!item.todo_edit_text.editableText.isNullOrEmpty()) {
-                            todoList.add(Todo(item.todo_edit_text.editableText.toString()))
+                            todoList.add(Todo(description = item.todo_edit_text.editableText.toString()))
                         }
                     }
                 }
