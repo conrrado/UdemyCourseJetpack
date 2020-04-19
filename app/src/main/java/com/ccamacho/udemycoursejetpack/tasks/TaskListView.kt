@@ -22,9 +22,9 @@ class TaskListView @JvmOverloads constructor(
         setUpView()
     }
 
-    private fun setDelegate(taskDelegate: TaskListFragment.TouchActionDelegate, dataActionDelegate: TaskListViewContract) {
+    private fun setDelegate(taskDelegate: TaskListFragment.TouchActionDelegate, dataActionDelegateValue: TaskListViewContract) {
         touchActionDelegate = taskDelegate
-        this.dataActionDelegate = dataActionDelegate
+        dataActionDelegate = dataActionDelegateValue
     }
 
     private fun setUpView() {
@@ -38,5 +38,20 @@ class TaskListView @JvmOverloads constructor(
 
     fun updateList(list: MutableList<Task>) {
         adapter.updateList(list)
+    }
+
+    fun updateItem(newTask: Task, indexInList: Int, indexInView: Int) {
+        adapter.onItemUpdated(
+            newItem = newTask,
+            indexInList = indexInList,
+            indexInView = indexInView
+        )
+    }
+
+    fun deleteItem(indexInList: Int, indexInView: Int) {
+        adapter.onItemDeleted(
+            indexInList = indexInList,
+            indexInView = indexInView
+        )
     }
 }

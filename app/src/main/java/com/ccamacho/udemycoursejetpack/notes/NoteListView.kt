@@ -22,9 +22,9 @@ class NoteListView @JvmOverloads constructor(
         setUpView()
     }
 
-    private fun setDelegate(noteDelegate: NoteListFragment.TouchActionDelegate, dataActionDelegate: NoteListViewContract) {
+    private fun setDelegate(noteDelegate: NoteListFragment.TouchActionDelegate, dataActionDelegateValue: NoteListViewContract) {
         touchActionDelegate = noteDelegate
-        this.dataActionDelegate = dataActionDelegate
+        dataActionDelegate = dataActionDelegateValue
     }
 
     private fun setUpView() {
