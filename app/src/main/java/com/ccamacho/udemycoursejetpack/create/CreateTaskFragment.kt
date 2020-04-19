@@ -10,6 +10,7 @@ import android.view.ViewGroup
 
 import com.ccamacho.udemycoursejetpack.R
 import com.ccamacho.udemycoursejetpack.foundations.ApplicationScope
+import com.ccamacho.udemycoursejetpack.foundations.CreateActivityScope
 import com.ccamacho.udemycoursejetpack.foundations.NullFieldChecker
 import com.ccamacho.udemycoursejetpack.foundations.StateChangeTextWatcher
 import com.ccamacho.udemycoursejetpack.models.Task
@@ -32,12 +33,15 @@ class CreateTaskFragment : Fragment() {
     @Inject
     lateinit var model: ITaskModel
 
+    @Inject
+    lateinit var stateModel: StateModel
+
     private var listener: OnFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Toothpick.inject(this, ApplicationScope.scope)
+        Toothpick.inject(this, CreateActivityScope.scope)
     }
 
     override fun onCreateView(
@@ -67,6 +71,7 @@ class CreateTaskFragment : Fragment() {
 
         create_task_view.task_edit_text.addTextChangedListener(object : StateChangeTextWatcher() {
             override fun afterTextChanged(s: Editable?) {
+                stateModel.updateState(s.toString())
 
                 if (!s.isNullOrEmpty() && previousValue.isNullOrEmpty()) {
                     addTodoView()

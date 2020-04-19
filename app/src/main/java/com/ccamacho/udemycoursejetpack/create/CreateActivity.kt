@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.ccamacho.udemycoursejetpack.R
 import com.ccamacho.udemycoursejetpack.foundations.ApplicationScope
+import com.ccamacho.udemycoursejetpack.foundations.CreateActivityScope
 import com.ccamacho.udemycoursejetpack.navigation.NavigationActivity
 import toothpick.Toothpick
 import javax.inject.Inject
@@ -25,7 +26,7 @@ class CreateActivity : AppCompatActivity(), CreateNoteFragment.OnFragmentInterac
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create)
 
-        Toothpick.inject(this, ApplicationScope.scope)
+        Toothpick.inject(this, CreateActivityScope.scope)
 
         supportActionBar?.title = ""
 

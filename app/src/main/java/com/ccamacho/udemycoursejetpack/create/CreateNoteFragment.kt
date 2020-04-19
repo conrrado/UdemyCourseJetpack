@@ -12,6 +12,7 @@ import android.view.ViewGroup
 
 import com.ccamacho.udemycoursejetpack.R
 import com.ccamacho.udemycoursejetpack.foundations.ApplicationScope
+import com.ccamacho.udemycoursejetpack.foundations.CreateActivityScope
 import com.ccamacho.udemycoursejetpack.foundations.NullFieldChecker
 import com.ccamacho.udemycoursejetpack.models.Note
 import com.ccamacho.udemycoursejetpack.notes.INoteModel
@@ -35,7 +36,7 @@ class CreateNoteFragment : Fragment(), NullFieldChecker {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Toothpick.inject(this, ApplicationScope.scope)
+        Toothpick.inject(this, CreateActivityScope.scope)
     }
 
     override fun onCreateView(

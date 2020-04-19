@@ -2,9 +2,7 @@ package com.ccamacho.udemycoursejetpack.create
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import javax.inject.Singleton
 
-@Singleton
 class StateModel {
 
     private val isEnabledLiveData: MutableLiveData<Boolean> = MutableLiveData()
