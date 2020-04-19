@@ -29,10 +29,14 @@ object CreateActivityScope {
     }
 }
 
+/*
+Documentation
+https://github.com/stephanenicolas/toothpick/wiki/Modules-&-Bindings
+ */
 object CreateActivityModule: Module() {
     init {
-        bind(INoteModel::class.java).to(NoteLocalModel::class.java)
-        bind(ITaskModel::class.java).to(TaskLocalModel::class.java)
-        bind(StateModel::class.java).toInstance(StateModel())
+        bind(INoteModel::class.java).to(NoteLocalModel::class.java) // will be assigned a new instance
+        bind(ITaskModel::class.java).to(TaskLocalModel::class.java) // will be assigned a new instance
+        bind(StateModel::class.java).toInstance(StateModel()) // will be assigned the same instance
     }
 }
