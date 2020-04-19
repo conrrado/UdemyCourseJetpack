@@ -14,6 +14,8 @@ import com.ccamacho.udemycoursejetpack.foundations.NullFieldChecker
 import com.ccamacho.udemycoursejetpack.models.Note
 import com.ccamacho.udemycoursejetpack.notes.INoteModel
 import kotlinx.android.synthetic.main.fragment_create_note.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import toothpick.Toothpick
 import java.lang.RuntimeException
 import javax.inject.Inject
@@ -54,11 +56,13 @@ class CreateNoteFragment : Fragment(), NullFieldChecker {
     }
 
     fun saveNote(callback: (Boolean) -> Unit) {
-        createNote()?.let {
-            model.addNote(it) {
-                callback.invoke(true)
-            }
-        } ?: callback.invoke(false)
+        GlobalScope.launch {
+            createNote()?.let { note ->
+                model.addNote(note) { success ->
+                    callback.invoke(success)
+                }
+            } ?: callback.invoke(false)
+        }
     }
 
     private fun createNote(): Note? =

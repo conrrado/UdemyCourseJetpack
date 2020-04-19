@@ -26,10 +26,8 @@ abstract class RoomDatabaseClient: RoomDatabase() {
             return instance!!
         }
 
-        // TODO move away from Main Thread Queries (Hint: Solution is Coroutines!)
         private fun createDatabase(context: Context): RoomDatabaseClient {
             return Room.databaseBuilder(context, RoomDatabaseClient::class.java, DB_NAME)
-                .allowMainThreadQueries()
                 .build()
         }
     }

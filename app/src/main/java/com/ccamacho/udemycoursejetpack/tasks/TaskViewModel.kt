@@ -24,7 +24,13 @@ class TaskViewModel: ViewModel(), TaskListViewContract {
     }
 
     fun loadData() {
-        _taskListLiveData.postValue(model.retrieveTasks())
+        GlobalScope.launch {
+            model.retrieveTasks { nullableList ->
+                nullableList?.let {
+                    _taskListLiveData.postValue(it)
+                }
+            }
+        }
     }
 
     override fun onTodoUpdated(taskIndex: Int, todoIndex: Int, isComplete: Boolean) {
@@ -43,9 +49,11 @@ class TaskViewModel: ViewModel(), TaskListViewContract {
     }
 
     override fun onTaskDeleted(taskIndex: Int) {
-        _taskListLiveData.value?.let {
-            model.deleteTask(it[taskIndex]) {
-                loadData()
+        GlobalScope.launch {
+            _taskListLiveData.value?.let {
+                model.deleteTask(it[taskIndex]) {
+                    loadData()
+                }
             }
         }
     }

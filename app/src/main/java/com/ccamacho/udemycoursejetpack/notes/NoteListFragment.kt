@@ -55,6 +55,7 @@ class NoteListFragment : Fragment() {
         viewModel.notesListLiveData.observe(viewLifecycleOwner, Observer { notesList ->
             contentView.updateList(notesList)
         })
+
     }
 
     companion object {
