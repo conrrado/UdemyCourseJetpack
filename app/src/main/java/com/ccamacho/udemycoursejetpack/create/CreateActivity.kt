@@ -6,15 +6,26 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.ccamacho.udemycoursejetpack.R
+import com.ccamacho.udemycoursejetpack.foundations.ApplicationScope
 import com.ccamacho.udemycoursejetpack.navigation.NavigationActivity
+import toothpick.Toothpick
+import javax.inject.Inject
 
 class CreateActivity : AppCompatActivity(), CreateNoteFragment.OnFragmentInteractionListener,
     CreateTaskFragment.OnFragmentInteractionListener {
 
+    var saveEnabled: Boolean = false
+
+    @Inject
+    lateinit var stateModel: StateModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create)
+
+        Toothpick.inject(this, ApplicationScope.scope)
 
         supportActionBar?.title = ""
 
@@ -26,10 +37,16 @@ class CreateActivity : AppCompatActivity(), CreateNoteFragment.OnFragmentInterac
                 createFragment(CreateNoteFragment.newInstance())
             }
         }
+
+        stateModel._isEnabledLiveData.observe(this, Observer {
+            saveEnabled = it
+            invalidateOptionsMenu()
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_save, menu)
+        menu?.findItem(R.id.save_item)?.isEnabled = saveEnabled
         return true
     }
 
